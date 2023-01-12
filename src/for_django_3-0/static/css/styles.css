@@ -1,0 +1,26 @@
+.checkboxes label {
+    display: inline-block;
+    padding-right: 10px;
+    white-space: nowrap;
+    color:green;
+  }
+  /*
+  .checkboxes input {
+    vertical-align: middle;
+    position: relative;
+  }
+  .checkboxes label span {
+    vertical-align: middle;
+  }
+  */
+
+
+#outer
+{
+    width:100%;
+    text-align: center;
+}  
+.swd-button
+{
+    display: inline-block;
+}

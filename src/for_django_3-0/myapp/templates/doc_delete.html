@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Minimal Django File Upload Example</title>
+        <!-- Add additional CSS in static file -->
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/delete.css' %}">
+        <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    </head>
+
+    <body>
+        <script>
+            var checked_count = 0
+            $(document).on("change", "input[type='checkbox']", function () {
+                console.log('checked:', this.checked);               
+                console.log('checked_count:', checked_count);
+
+                if ($(this).attr("name") != 'toDeleteDocs') {
+                    return;
+                }
+
+                checked_count = 0;
+                checkboxes = document.getElementsByName('toDeleteDocs');
+                for(var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked)
+                        checked_count++;
+                }
+                console.log('checked_count:', checked_count);
+                if (checked_count) {
+                    document.getElementById('delSubmit').disabled = false;
+                    document.getElementById('deselectAll').checked = false;
+                    document.getElementById('selectAll').checked = false;
+                } else
+                    document.getElementById('delSubmit').disabled = true;
+                
+                checkboxes = document.getElementsByName('toDeleteDocs');
+            });
+            function toggle(source) {
+                checkboxes = document.getElementsByName('toDeleteDocs');
+                for(var i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked = true;
+                }
+                console.log('source.checked:', source.checked);
+                document.getElementById('delSubmit').disabled = false;
+                document.getElementById('deselectAll').checked = false;
+            }
+            function deselect(source) {
+                checkboxes = document.getElementsByName('toDeleteDocs');
+                for(var i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked = false;
+                }
+                console.log('source.checked:', source.checked);
+                document.getElementById('delSubmit').disabled = true;
+                document.getElementById('selectAll').checked = false;
+            }
+        </script>
+ 
+        <!-- List of uploaded documents -->
+        {% if object_list %}
+            All documents in the database:
+            <ul>
+                <div class="swd-button">
+                    <input type="checkbox"  onClick="toggle(this)" id="selectAll"/> Select All <br/></div>
+                    <input type="checkbox"  onClick="deselect(this)" id="deselectAll"/> Deselect All <br/></div>
+                </div>
+                <section>
+                <form action="/handelDelete"
+                          style="display: inline;"
+                          method="post">
+                        {% csrf_token %}
+                        {% for document in object_list %}
+                        <div class="checkboxes">
+                            <label>
+                            <input type="checkbox" class="visible-cb" value={{document.id}} name="toDeleteDocs" /> 
+                            {{ document.docfile.name }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                        <p><input type="submit" value="Delete" id="delSubmit" disabled/></p>
+                    </form>
+                </section>
+                </ul>
+        {% else %}
+            <p>No documents.</p>
+        {% endif %}
+
+    </body>
+</html>

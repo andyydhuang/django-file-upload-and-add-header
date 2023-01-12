@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Minimal Django File Upload Example</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/upload.css' %}">
+        <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    </head>
+
+    <body>
+        <script>
+            $(document).ready(function() {
+              validate();
+              $('input').on('keyup', validate);
+            });
+            
+            function validate() {
+              var inputsWithValues = 0;
+              
+              // get all input fields except for type='submit'
+              var myInputs = $("input:not([type='hidden'],[type='submit'],[type='file'])");
+              console.log("myInputs.length:", myInputs.length)
+              myInputs.each(function(e) {
+                //console.log("test...", $(this).val())
+                // if it has a value, increment the counter
+                if ($(this).val()) {
+                  inputsWithValues += 1;
+                  console.log("inputsWithValues:", inputsWithValues)
+                }
+              });
+            
+              if (inputsWithValues == myInputs.length) {
+                $("input[type=submit]").prop("disabled", false);
+              } else {
+                $("input[type=submit]").prop("disabled", true);
+              }
+            }
+        </script>
+        <!-- Upload form. Note enctype attribute! -->
+        <!--form action="{% url "my-view" %}" method="post" enctype="multipart/form-data"-->
+        <form action="/handelUpload" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p><!--input type="text" name="file_index">    file index</p-->
+
+            <p>{{ form.non_field_errors }}</p>
+    
+            <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+    
+            <p>
+                {{ form.docfile.errors }}
+                {{ form.docfile }}
+            </p>
+    
+            <p><input type="submit" value="Upload"/></p>
+        </form>
+    </body>
+</html>

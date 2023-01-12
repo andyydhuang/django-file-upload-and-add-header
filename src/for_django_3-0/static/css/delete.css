@@ -1,0 +1,21 @@
+body{
+  font-size: 20px;
+  color: rgb(5, 68, 104);
+  margin-left: 50px;
+  margin-top: 50px;
+}
+
+.checkboxes
+{
+  line-height:25px;
+}
+
+.swd-button
+{
+    display: inline-block;
+    line-height:50px;
+    /* margin-right: 40px; */
+}
+
+
+
